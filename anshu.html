@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Click Pic and WhatsApp</title>
+</head>
+<body>
+  <h2>Click Picture and Send WhatsApp</h2>
+
+  <video id="video" width="400" height="300" autoplay></video><br>
+  <button id="snap">Click Picture</button><br><br>
+
+  <canvas id="canvas" width="400" height="300"></canvas><br>
+  <a id="download" download="photo.png">Download Picture</a><br><br>
+
+  <a id="whatsappLink" target="_blank">Send WhatsApp</a>
+
+  <script>
+    const video = document.getElementById('video');
+    const snap = document.getElementById('snap');
+    const canvas = document.getElementById('canvas');
+    const download = document.getElementById('download');
+    const whatsappLink = document.getElementById('whatsappLink');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => { video.srcObject = stream; })
+      .catch((err) => { console.error(err); });
+
+    snap.addEventListener('click', () => {
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, 400, 300);
+
+      // Create download link
+      const image = canvas.toDataURL('image/png');
+      download.href = image;
+
+      // Create WhatsApp link (text only)
+      const phoneNumber = '91xxxxxxxxxx'; // Replace with recipient number
+      const message = encodeURIComponent('Hi! I just clicked this picture.');
+      whatsappLink.href = `https://wa.me/${phoneNumber}?text=${message}`;
+    });
+  </script>
+</body>
+</html>
